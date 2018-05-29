@@ -100,7 +100,10 @@ if __name__ == "__main__":
 	filename = "people-walking.gif"
 	filename = "people-cctv.mp4"
 	filename = "just-do-it.mp4"
+	filename = "airport.mp4"
+	filename = "cctv-fall.mp4"
 	# detectmotion(1, "slow-motion1.gif")
 	# detectmotion(1, filename)
 	# detectmotion(camera)
-	detectmotion(filename)
+	data_dir = "dataset/"
+	detectmotion(data_dir + filename)
