@@ -26,46 +26,20 @@ def detectmotion(input, kernel, area):
         # add current frame to background model and retrieve current foreground objects
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         gaussianGray = cv2.GaussianBlur(gray,(21,21),0)
-
-        # if firstFrame is None:
-        #     firstFrame = gaussianGray
-        #     continue
-
-    # fgmask = mog.apply(cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY));
-    # get current background image (representative of current GMM model)
-    # bgmodel = mog.getBackgroundImage();
-        frameDelta = mog.apply(gaussianGray);
-# get current background image (representative of current GMM model)
+        fgmask = mog.apply(gaussianGray);
+        # get current background image (representative of current GMM model)
         bgmodel = mog.getBackgroundImage();
-        thresh = cv2.threshold(frameDelta,25, 255, cv2.THRESH_BINARY)[1]
-        thresh = cv2.dilate(thresh, None, iterations=2)
-        # (cnts, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
-		# cv2.CHAIN_APPROX_SIMPLE)
+        threshBinary = cv2.threshold(fgmask,25, 255, cv2.THRESH_BINARY)[1]
+        thresh = cv2.dilate(threshBinary, None, iterations=2)
 
-    # fgmask = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, np.ones(kernel, np.uint8))
 
-    # least to greatest
         startCoords = []
         endCoords = []
-        # (im2, contours, hierarchy) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         image, contours, hierarchy = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
         for c in contours:
             a = cv2.contourArea(c)
             if a < area:
                 continue
-
-
-        #         if cv2.contourArea(c) < args["min_area"]:
-		# 	continue
- 
-		# # compute the bounding box for the contour, draw it on the frame,
-		# # and update the text
-		# (x, y, w, h) = cv2.boundingRect(c)
-		# cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-		# text = "Occupied"
-
-
 
             (x,y,w,h) = cv2.boundingRect(c)
             cv2.rectangle(frame, (x,y), (x + w, y + h), (0,0,255), 2)
@@ -82,7 +56,7 @@ def detectmotion(input, kernel, area):
             #     if(y + h > endCoords[1]):
             #         endCoords[1] = y + h
 
-    # display images - input, background and original
+        # display images - input, background and original
         cv2.imshow("Foreground Objects", thresh)
         # if(startCoords and endCoords):
         #     cv2.rectangle(frame, tuple(startCoords), tuple(endCoords), (0,0,255), 2)
@@ -104,10 +78,10 @@ if __name__ == "__main__":
     # filename = "people-cctv.mp4"
     # filename = "just-do-it.mp4"
     # filename = "airport.mp4"
-    filename = "cctv-fall.mp4"
+    # filename = "cctv-fall.mp4"
 
     # detectmotion(camera)
     kernel = (2, 2)
-    area = 1000
-    # detectmotion(0, kernel, area)
-    detectmotion(data_dir + filename, kernel, area)
+    area = 5000
+    detectmotion(0, kernel, area)
+    # detectmotion(data_dir + filename, kernel, area)

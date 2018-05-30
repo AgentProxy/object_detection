@@ -83,9 +83,10 @@ if __name__ == "__main__":
 	# filename = "people-cctv.mp4"
 	# filename = "just-do-it.mp4"
 	# filename = "airport.mp4"
-	# filename = "cctv-fall.mp4"
+	filename = "cctv-fall.mp4"
 
 	# detectmotion(camera)
+	data_dir = "dataset/"
 	kernel = (2, 2)
 	area = 30
 	# detectmotion(0, kernel, area)
