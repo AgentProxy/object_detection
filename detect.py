@@ -2,7 +2,7 @@ import sys
 import cv2
 import numpy as np
 
-def detectmotion(input):
+def detectmotion(input, kernel, area):
 
 	cap = cv2.VideoCapture()
 	if(not cap.open(input)):
@@ -16,39 +16,24 @@ def detectmotion(input):
 	mog = cv2.createBackgroundSubtractorMOG2();
 	while(True):
 		# if video file successfully open then read frame from video
-		ret = None
-		frame = None
-		if (cap.isOpened):
+		if(cap.isOpened):
 			ret, frame = cap.read()
 			# when we reach the end of the video (file) exit cleanly
 			if (ret == 0):
 				return
-			grayFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
 		# add current frame to background model and retrieve current foreground objects
-		bgmodel = mog.getBackgroundImage();
-		fgmask = mog.apply(grayFrame);
+		fgmask = mog.apply(cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY));
 		# get current background image (representative of current GMM model)
-
-		kernel = np.ones((5,5),np.uint8)
-		# kernel1 = np.ones((1,1),np.uint8)
-		# kernel2 = np.ones((3,3),np.uint8)
-		# kernel3 = np.ones((5,5),np.uint8)
-
-		# sample1 = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel1)
-		# sample2 = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel2)
-		# sample3 = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel3)
-
-		# cv2.imshow('Varying kernels', np.hstack([sample1, sample2, sample3]))
-		fgmask = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel)
+		bgmodel = mog.getBackgroundImage();
+		fgmask = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, np.ones(kernel, np.uint8))
 	
 		# least to greatest
 		startCoords = []
 		endCoords = []
 		(im2, contours, hierarchy) = cv2.findContours(fgmask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 		for c in contours:
-			area = cv2.contourArea(c)
-			if area < 30:
+			a = cv2.contourArea(c)
+			if a < area:
 				continue
 			
 			(x,y,w,h) = cv2.boundingRect(c)
@@ -81,8 +66,8 @@ def detectmotion(input):
 if __name__ == "__main__":
 	data_dir = "dataset/"
 	camera = 0
-	# filename = "trooper.gif"
-	filename = "slow-motion2.gif"
+	filename = "trooper.gif"
+	# filename = "slow-motion2.gif"
 	# filename = "slow-motion1.gif"
 	# filename = "people-walking.gif"
 	# filename = "people-cctv.mp4"
@@ -91,4 +76,6 @@ if __name__ == "__main__":
 	# filename = "cctv-fall.mp4"
 
 	# detectmotion(camera)
-	detectmotion(data_dir + filename)
+	kernel = (2, 2)
+	area = 30
+	detectmotion(data_dir + filename, kernel, area)
