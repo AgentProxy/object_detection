@@ -11,7 +11,6 @@ def detectmotion(input, kernel, area):
 	# create window by name (as resizable)
 	cv2.namedWindow("Image Input", cv2.WINDOW_FULLSCREEN);
 	cv2.namedWindow("Foreground Objects", cv2.WINDOW_FULLSCREEN);
-	cv2.namedWindow("Background Model", cv2.WINDOW_FULLSCREEN);
 
 	mog = cv2.createBackgroundSubtractorMOG2();
 	while(True):
@@ -64,9 +63,20 @@ def detectmotion(input, kernel, area):
 	cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-	data_dir = "dataset/"
-	camera = 0
-	filename = "trooper.gif"
+
+	kernel = (2, 2)
+	area = 30
+
+	# ====================================
+	# Uncomment if user wants to use camera
+	# camera = 0
+	# detectmotion(camera, kernel, area)
+	# ====================================
+
+	# ====================================
+	# Uncomment if user wants to use input files
+	# data_dir = "dataset/"
+	# filename = "trooper.gif"
 	# filename = "slow-motion2.gif"
 	# filename = "slow-motion1.gif"
 	# filename = "people-walking.gif"
@@ -78,5 +88,5 @@ if __name__ == "__main__":
 	# detectmotion(camera)
 	kernel = (2, 2)
 	area = 30
-	detectmotion(0, kernel, area)
+	# detectmotion(0, kernel, area)
 	detectmotion(data_dir + filename, kernel, area)

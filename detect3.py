@@ -68,7 +68,7 @@ def detectmotion(input, kernel, area):
 
 
             (x,y,w,h) = cv2.boundingRect(c)
-            cv2.rectangle(frame, (x,y), (x + w, y + h), (0,255,0), 2)
+            cv2.rectangle(frame, (x,y), (x + w, y + h), (0,0,255), 2)
             # if(not len(startCoords) and not len(endCoords)):
             #     startCoords.extend((x, y))
             #     endCoords.extend((x+w, y+h))
@@ -97,17 +97,17 @@ def detectmotion(input, kernel, area):
 if __name__ == "__main__":
     data_dir = "dataset/"
     camera = 0
-    filename = "trooper.gif"
+    # filename = "trooper.gif"
     # filename = "slow-motion2.gif"
     # filename = "slow-motion1.gif"
     # filename = "people-walking.gif"
     # filename = "people-cctv.mp4"
     # filename = "just-do-it.mp4"
     # filename = "airport.mp4"
-    # filename = "cctv-fall.mp4"
+    filename = "cctv-fall.mp4"
 
     # detectmotion(camera)
     kernel = (2, 2)
     area = 1000
-    detectmotion(0, kernel, area)
+    # detectmotion(0, kernel, area)
     detectmotion(data_dir + filename, kernel, area)
