@@ -78,4 +78,5 @@ if __name__ == "__main__":
 	# detectmotion(camera)
 	kernel = (2, 2)
 	area = 30
+	detectmotion(0, kernel, area)
 	detectmotion(data_dir + filename, kernel, area)
