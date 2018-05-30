@@ -3,7 +3,6 @@ import cv2
 import numpy as np
 
 def detectmotion(input, kernel, area):
-
     cap = cv2.VideoCapture()
     if(not cap.open(input)):
         print "No video found"
@@ -11,10 +10,7 @@ def detectmotion(input, kernel, area):
     # create window by name (as resizable)
     cv2.namedWindow("Image Input", cv2.WINDOW_FULLSCREEN);
     cv2.namedWindow("Foreground Objects", cv2.WINDOW_FULLSCREEN);
-    cv2.namedWindow("Background Model", cv2.WINDOW_FULLSCREEN);
-
-    # mog = cv2.createBackgroundSubtractorMOG2();
-    firstFrame = None
+    #Subtract foreground and background
     mog = cv2.createBackgroundSubtractorMOG2();
     while(True):
     # if video file successfully open then read frame from video
@@ -32,7 +28,6 @@ def detectmotion(input, kernel, area):
         threshBinary = cv2.threshold(fgmask,25, 255, cv2.THRESH_BINARY)[1]
         thresh = cv2.dilate(threshBinary, None, iterations=2)
 
-
         startCoords = []
         endCoords = []
         image, contours, hierarchy = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -43,6 +38,9 @@ def detectmotion(input, kernel, area):
 
             (x,y,w,h) = cv2.boundingRect(c)
             cv2.rectangle(frame, (x,y), (x + w, y + h), (0,0,255), 2)
+            # for small boxes. Commented out on purpose
+
+
             # if(not len(startCoords) and not len(endCoords)):
             #     startCoords.extend((x, y))
             #     endCoords.extend((x+w, y+h))
@@ -82,6 +80,9 @@ if __name__ == "__main__":
 
     # detectmotion(camera)
     kernel = (2, 2)
-    area = 5000
-    detectmotion(0, kernel, area)
-    # detectmotion(data_dir + filename, kernel, area)
+    area = 1000                 #adjust depending on video situation
+
+
+    # Uncomment if webcam will be used
+    # detectmotion(0, kernel, area)
+    detectmotion(data_dir + filename, kernel, area)
